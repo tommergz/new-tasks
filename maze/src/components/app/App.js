@@ -18,7 +18,7 @@ function App() {
 
   const wayOut = (maze, entryPoint) => {
     let allWay = [];
-    const passedPoitns = [];
+    let passedPoitns = [];
     let exit = false;
     const xLineLengh = maze[0].length - 1;
     const yLineLengh = maze.length - 1;
@@ -36,38 +36,51 @@ function App() {
       if (!maze[y]) return false;
       return maze[y][x];
     }
-    const mole = (point, way) => {
+    const mole = (point, way, directions) => {
       const x = point.x;
       const y = point.y;
       if (way.length > 0) {
         if (x === 0 || x === xLineLengh || y === 0 || y === yLineLengh) {
           way.push(point);
-          allWay = way;
+          if (allWay.length === 0) {
+            allWay = way
+          } else {
+            allWay = allWay > way ? way : allWay
+          };
           exit = true;
           return allWay;
         }
       };
       way.push(point);
       passedPoitns.push(point);
-      if (nextCellTest(x, y + 1, way)) {
-        const nextPoint = {x: x, y: y + 1}
-        mole(nextPoint, [...way])
+      if (nextCellTest(x + directions[0], y + directions[1], way)) {
+        const nextPoint = {x: x + directions[0], y: y + directions[1]}
+        mole(nextPoint, [...way], directions)
       }
-      if (nextCellTest(x - 1, y, way)) {
-        const nextPoint = {x: x - 1, y: y}
-        mole(nextPoint, [...way])
+      if (nextCellTest(x + directions[2], y + directions[3], way)) {
+        const nextPoint = {x: x + directions[2], y: y + directions[3]}
+        mole(nextPoint, [...way], directions)
       }
-      if (nextCellTest(x, y - 1, way)) {
-        const nextPoint = {x: x, y: y -1}
-        mole(nextPoint, [...way])
+      if (nextCellTest(x + directions[4], y + directions[5], way)) {
+        const nextPoint = {x: x + directions[4], y: y + directions[5]}
+        mole(nextPoint, [...way], directions)
       }
-      if (nextCellTest(x + 1, y, way)) {
-        const nextPoint = {x: x + 1, y: y}
-        mole(nextPoint, [...way])
+      if (nextCellTest(x + directions[6], y + directions[7], way)) {
+        const nextPoint = {x: x + directions[6], y: y + directions[7]}
+        mole(nextPoint, [...way], directions)
       }
     }
-    mole(entryPoint, []);
-    return exit ? allWay : 'There is no way out';
+    mole(entryPoint, [], [0, -1, 1, 0, 0, 1, -1, 0]);
+    passedPoitns = [];
+    exit = false;
+    mole(entryPoint, [], [1, 0, 0, 1, -1, 0, 0, -1]);
+    passedPoitns = [];
+    exit = false;
+    mole(entryPoint, [], [0, 1, -1, 0, 0, -1, 1, 0]);
+    passedPoitns = [];
+    exit = false;
+    mole(entryPoint, [], [-1, 0, 0, -1, 1, 0, 0, 1]);
+    return exit ? allWay : false;
   }
 
   const handleClick = () => {
