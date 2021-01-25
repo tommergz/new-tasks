@@ -1,0 +1,62 @@
+
+.common-wrapp {
+  display: flex;
+  justify-content: center;
+}
+
+.search-wrapp {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.coord {
+  text-align: center;
+  width: 20px;
+  margin-right: 5px;
+}
+
+:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+ 
+:focus::-moz-placeholder {
+  color: transparent;
+}
+ 
+:focus:-moz-placeholder {
+  color: transparent;
+}
+ 
+:focus:-ms-input-placeholder {
+  color: transparent;
+}
+
+.inputs-wrapp {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid #cecece;
+  border-radius: 5px;
+}
+
+input, button {outline:none;}
+
+.input-button {
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.text-center{
+margin-top:20px;
+}
+
+span {
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
