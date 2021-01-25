@@ -5,10 +5,10 @@ import Board from '../board/Board';
 function App() {
   const myMaze = [ 
     [false,false,false,false,false,false,false,false,false], 
-    [false,true,false,true,true,false,true,true,false], 
+    [false,true,false,true,true,false,true,true,true], 
     [false,true,false,false,true,false,true,false,false], 
-    [true,true,false,true,true,true,true,true,false], 
-    [false,true,false,true,false,true,false,true,false], 
+    [false,true,false,true,true,true,true,true,false], 
+    [true,true,false,true,false,true,false,true,false], 
     [false,true,true,true,false,true,true,true,false], 
     [false,false,false,false,false,true,false,false,false]
   ];
@@ -19,9 +19,34 @@ function App() {
   const wayOut = (maze, entryPoint) => {
     let allWay = [];
     let passedPoitns = [];
+    const finish = entryPoint;
     let exit = false;
     const xLineLengh = maze[0].length - 1;
     const yLineLengh = maze.length - 1;
+
+    let exits = [];
+    for (let i = 0; i <= xLineLengh; i++) {
+      if (maze[0][i]) {
+        exits.push({x: i, y: 0})
+      }
+    }
+    for (let i = 0; i <= xLineLengh; i++) {
+      if (maze[yLineLengh][i]) {
+        exits.push({x: i, y: yLineLengh})
+      }
+    }
+    for (let i = 0; i <= yLineLengh; i++) {
+      if (maze[i][0]) {
+        exits.push({x: 0, y: i})
+      }
+    }
+    for (let i = 0; i <= yLineLengh; i++) {
+      if (maze[i][xLineLengh]) {
+        exits.push({x: xLineLengh, y: i})
+      }
+    }
+    exits = exits.filter(obj => obj.x !== finish.x || obj.y !== finish.y);
+
     if (!maze[y][x]) {
       alert(`this cell isn't walkable`);
       return false;
@@ -36,11 +61,12 @@ function App() {
       if (!maze[y]) return false;
       return maze[y][x];
     }
+
     const mole = (point, way, directions) => {
       const x = point.x;
       const y = point.y;
       if (way.length > 0) {
-        if (x === 0 || x === xLineLengh || y === 0 || y === yLineLengh) {
+        if (x === finish.x && y === finish.y) {
           way.push(point);
           if (allWay.length === 0) {
             allWay = way
@@ -53,6 +79,7 @@ function App() {
       };
       way.push(point);
       passedPoitns.push(point);
+
       if (nextCellTest(x + directions[0], y + directions[1], way)) {
         const nextPoint = {x: x + directions[0], y: y + directions[1]}
         mole(nextPoint, [...way], directions)
@@ -70,21 +97,25 @@ function App() {
         mole(nextPoint, [...way], directions)
       }
     }
-    mole(entryPoint, [], [0, -1, 1, 0, 0, 1, -1, 0]);
-    passedPoitns = [];
-    exit = false;
-    mole(entryPoint, [], [1, 0, 0, 1, -1, 0, 0, -1]);
-    passedPoitns = [];
-    exit = false;
-    mole(entryPoint, [], [0, 1, -1, 0, 0, -1, 1, 0]);
-    passedPoitns = [];
-    exit = false;
-    mole(entryPoint, [], [-1, 0, 0, -1, 1, 0, 0, 1]);
+    for (let i = 0; i < exits.length; i++) {
+      let entryPoint = exits[i];
+      mole(entryPoint, [], [0, -1, 1, 0, 0, 1, -1, 0]);
+      passedPoitns = [];
+      exit = false;
+      mole(entryPoint, [], [1, 0, 0, 1, -1, 0, 0, -1]);
+      passedPoitns = [];
+      exit = false;
+      mole(entryPoint, [], [0, 1, -1, 0, 0, -1, 1, 0]);
+      passedPoitns = [];
+      exit = false;
+      mole(entryPoint, [], [-1, 0, 0, -1, 1, 0, 0, 1]);
+    }
     return exit ? allWay : false;
   }
 
   const handleClick = () => {
-    const newMaze = [...maze];
+    const newMaze = [...myMaze];
+    exitFinder(newMaze);
     const entryPoint = {};
     entryPoint.x = +x;
     entryPoint.y = +y;
