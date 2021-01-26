@@ -24,6 +24,11 @@ function App() {
     const xLineLengh = maze[0].length - 1;
     const yLineLengh = maze.length - 1;
 
+    if (!maze[y] || !maze[y][x]) {
+      alert(`This cell isn't walkable`);
+      return null;
+    }
+
     let exits = [];
     for (let i = 0; i <= xLineLengh; i++) {
       if (maze[0][i]) {
@@ -47,10 +52,11 @@ function App() {
     }
     exits = exits.filter(obj => obj.x !== finish.x || obj.y !== finish.y);
 
-    if (!maze[y][x]) {
-      alert(`this cell isn't walkable`);
-      return false;
+    if (!exits.length) {
+      alert('There is no way out')
+      return null
     }
+
     const nextCellTest = (x, y, way) => {
       if (exit) return false;
       if (way.length > 1) {
