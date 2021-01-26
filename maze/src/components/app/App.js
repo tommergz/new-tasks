@@ -110,7 +110,7 @@ function App() {
       exit = false;
       mole(entryPoint, [], [-1, 0, 0, -1, 1, 0, 0, 1]);
     }
-    return exit ? allWay : false;
+    return exit ? allWay.reverse() : false;
   }
 
   const handleClick = () => {
@@ -124,6 +124,7 @@ function App() {
     for (let i = 0; i < way.length; i++) {
       newMaze[way[i].y][way[i].x] = '*';
     }
+    console.log(way)
     exitFinder(newMaze)
   }
 
